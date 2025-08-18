@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShelfShare.DataAccess.Repository
+namespace ShelfShare.DataAccess.Abstract
 {
     public interface IUserBookRepository : IRepository<UserBook>
     {

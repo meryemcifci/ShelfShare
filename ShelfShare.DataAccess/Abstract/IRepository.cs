@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShelfShare.DataAccess.Repository
+namespace ShelfShare.DataAccess.Abstract
 {
     public interface IRepository<T> where T : class, new()
     {
@@ -16,6 +16,12 @@ namespace ShelfShare.DataAccess.Repository
         Task UpdateAsync(T entity);
         Task DeleteAsync(int id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+        Task<int> CountAsync(Expression<Func<T, bool>> predicate = null);
+        Task AddRangeAsync(IEnumerable<T> entities);
+        Task UpdateRangeAsync(IEnumerable<T> entities);
+        IQueryable<T> GetQueryable();
     }
 
 }

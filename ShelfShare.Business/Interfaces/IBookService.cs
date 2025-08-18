@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShelfShare.Business.Abstract
+namespace ShelfShare.Business.Interfaces
 {
     public interface IBookService
     {

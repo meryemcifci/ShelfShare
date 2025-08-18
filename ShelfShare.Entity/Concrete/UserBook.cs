@@ -11,7 +11,7 @@ namespace ShelfShare.Entity.Concrete
     {
         public int UserId { get; set; }
         public int BookId { get; set; }
-        public ReadingStatus Status { get; set; } // WantToRead, Reading, Completed
+        public ReadingStatus Status { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? CompletedDate { get; set; }
         public int CurrentPage { get; set; }
