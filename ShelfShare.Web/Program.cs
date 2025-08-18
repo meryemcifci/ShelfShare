@@ -13,7 +13,16 @@ namespace ShelfShare.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            // CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173") // Vite dev server portu
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<Context>(options =>
@@ -43,11 +52,15 @@ namespace ShelfShare.Web
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowFrontend"); // Cors'u buraya ekliyoruz
+
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            app.MapControllers();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
