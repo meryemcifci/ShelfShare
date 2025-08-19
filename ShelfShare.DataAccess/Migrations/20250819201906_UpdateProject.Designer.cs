@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShelfShare.DataAccess.Concrete;
 
@@ -11,9 +12,11 @@ using ShelfShare.DataAccess.Concrete;
 namespace ShelfShare.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250819201906_UpdateProject")]
+    partial class UpdateProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -483,9 +486,6 @@ namespace ShelfShare.DataAccess.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -510,8 +510,6 @@ namespace ShelfShare.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("BookId1");
 
                     b.HasIndex("UserId");
 
@@ -729,13 +727,10 @@ namespace ShelfShare.DataAccess.Migrations
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Reading", b =>
                 {
                     b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("ShelfShare.Entity.Concrete.Book", null)
                         .WithMany("Readings")
-                        .HasForeignKey("BookId1");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ShelfShare.Entity.Concrete.AppUser", "User")
                         .WithMany("Readings")

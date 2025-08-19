@@ -23,11 +23,19 @@ namespace ShelfShare.Entity.Concrete
         public UserRole Role { get; set; }
 
         // Navigation Properties
-        public virtual ICollection<UserBook> UserBooks { get; set; }
-        public virtual ICollection<Book> AddedBooks { get; set; }
-        public virtual ICollection<Review> Reviews { get; set; }
-        public virtual ICollection<FamilyMember> FamilyMemberships { get; set; }
-        public virtual Family OwnedFamily { get; set; }
+        public virtual ICollection<ReadingGoal> ReadingGoals { get; set; } = new List<ReadingGoal>();
+        public virtual ICollection<Book> AddedBooks { get; set; } = new List<Book>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<Review> SuggestedToUser { get; set; } = new List<Review>();
+        public virtual ICollection<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
+        //public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        // Kullanıcının aldığı bildirimler
+        public ICollection<Notification> ReceivedNotifications { get; set; } = new List<Notification>();
+        // Kullanıcının gönderdiği bildirimler
+        public ICollection<Notification> SentNotifications { get; set; } = new List<Notification>();
+
+        public virtual ICollection<Reading> Readings { get; set; } = new List<Reading>();
+
     }
 }
 

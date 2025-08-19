@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShelfShare.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class UpdateProject : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,6 +76,24 @@ namespace ShelfShare.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Group",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupType = table.Column<int>(type: "int", nullable: false),
+                    JoinCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Group", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,31 +203,6 @@ namespace ShelfShare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Families",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FamilyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FamilyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Families", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Families_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ReadingGoals",
                 columns: table => new
                 {
@@ -219,7 +212,6 @@ namespace ShelfShare.DataAccess.Migrations
                     Year = table.Column<int>(type: "int", nullable: false),
                     TargetBooksCount = table.Column<int>(type: "int", nullable: false),
                     CompletedBooksCount = table.Column<int>(type: "int", nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -228,8 +220,8 @@ namespace ShelfShare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_ReadingGoals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReadingGoals_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_ReadingGoals_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -252,6 +244,7 @@ namespace ShelfShare.DataAccess.Migrations
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FamilyId = table.Column<int>(type: "int", nullable: false),
                     AddedByUserId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -266,68 +259,109 @@ namespace ShelfShare.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Books_Families_FamilyId",
-                        column: x => x.FamilyId,
-                        principalTable: "Families",
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FamilyMembers",
+                name: "GroupMembers",
                 columns: table => new
                 {
-                    FamilyId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FamilyMembers", x => new { x.FamilyId, x.UserId });
+                    table.PrimaryKey("PK_GroupMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FamilyMembers_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_GroupMembers_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FamilyMembers_Families_FamilyId",
-                        column: x => x.FamilyId,
-                        principalTable: "Families",
+                        name: "FK_GroupMembers_Group_Id",
+                        column: x => x.Id,
+                        principalTable: "Group",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookCategories",
+                name: "Notification",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: true),
+                    BookId = table.Column<int>(type: "int", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCategories", x => new { x.BookId, x.CategoryId });
+                    table.PrimaryKey("PK_Notification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookCategories_Books_BookId",
+                        name: "FK_Notification_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notification_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notification_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Readings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Readings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Readings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Readings_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -344,7 +378,9 @@ namespace ShelfShare.DataAccess.Migrations
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
+                    ReadingId = table.Column<int>(type: "int", nullable: true),
+                    SuggestedToUserId = table.Column<int>(type: "int", nullable: true),
+                    AppUserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -356,6 +392,17 @@ namespace ShelfShare.DataAccess.Migrations
                         name: "FK_Reviews_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reviews_AspNetUsers_SuggestedToUserId",
+                        column: x => x.SuggestedToUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -364,40 +411,12 @@ namespace ShelfShare.DataAccess.Migrations
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserBooks",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CompletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CurrentPage = table.Column<int>(type: "int", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserBooks", x => new { x.UserId, x.BookId });
                     table.ForeignKey(
-                        name: "FK_UserBooks_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Reviews_Readings_ReadingId",
+                        column: x => x.ReadingId,
+                        principalTable: "Readings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserBooks_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -440,35 +459,61 @@ namespace ShelfShare.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookCategories_CategoryId",
-                table: "BookCategories",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_AddedByUserId",
                 table: "Books",
                 column: "AddedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_FamilyId",
+                name: "IX_Books_CategoryId",
                 table: "Books",
-                column: "FamilyId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Families_OwnerId",
-                table: "Families",
-                column: "OwnerId",
+                name: "IX_GroupMembers_GroupId_UserId",
+                table: "GroupMembers",
+                columns: new[] { "GroupId", "UserId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FamilyMembers_AppUserId",
-                table: "FamilyMembers",
-                column: "AppUserId");
+                name: "IX_GroupMembers_Id_UserId",
+                table: "GroupMembers",
+                columns: new[] { "Id", "UserId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReadingGoals_AppUserId",
+                name: "IX_GroupMembers_UserId",
+                table: "GroupMembers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_BookId",
+                table: "Notification",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_ReceiverId",
+                table: "Notification",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_SenderId",
+                table: "Notification",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReadingGoals_UserId",
                 table: "ReadingGoals",
-                column: "AppUserId");
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Readings_BookId",
+                table: "Readings",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Readings_UserId",
+                table: "Readings",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_AppUserId",
@@ -481,14 +526,19 @@ namespace ShelfShare.DataAccess.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserBooks_AppUserId",
-                table: "UserBooks",
-                column: "AppUserId");
+                name: "IX_Reviews_ReadingId",
+                table: "Reviews",
+                column: "ReadingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserBooks_BookId",
-                table: "UserBooks",
-                column: "BookId");
+                name: "IX_Reviews_SuggestedToUserId",
+                table: "Reviews",
+                column: "SuggestedToUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -510,10 +560,10 @@ namespace ShelfShare.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookCategories");
+                name: "GroupMembers");
 
             migrationBuilder.DropTable(
-                name: "FamilyMembers");
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "ReadingGoals");
@@ -522,22 +572,22 @@ namespace ShelfShare.DataAccess.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "UserBooks");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Group");
+
+            migrationBuilder.DropTable(
+                name: "Readings");
 
             migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Families");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
         }
     }
 }

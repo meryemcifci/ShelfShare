@@ -22,10 +22,11 @@ namespace ShelfShare.Entity.Concrete
         public int AddedByUserId { get; set; }
 
         // Navigation Properties
-        public virtual Family Family { get; set; }
-        public virtual AppUser AddedByUser { get; set; }
-        public virtual ICollection<UserBook> UserBooks { get; set; }
-        public virtual ICollection<Review> Reviews { get; set; }
-        public virtual ICollection<BookCategory> BookCategories { get; set; }
+      
+        public virtual AppUser AddedByUser { get; set; } = new AppUser();
+        public virtual Category Category { get; set; }= new Category();
+        public virtual ICollection<Review> Reviews { get; set; }= new List<Review>();
+        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public virtual ICollection<Reading> Readings { get; set; } = new List<Reading>();
     }
 }

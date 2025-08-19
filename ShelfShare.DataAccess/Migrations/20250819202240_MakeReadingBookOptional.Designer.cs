@@ -12,8 +12,8 @@ using ShelfShare.DataAccess.Concrete;
 namespace ShelfShare.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250817143605_Init")]
-    partial class Init
+    [Migration("20250819202240_MakeReadingBookOptional")]
+    partial class MakeReadingBookOptional
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -268,6 +268,9 @@ namespace ShelfShare.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CoverImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -314,36 +317,9 @@ namespace ShelfShare.DataAccess.Migrations
 
                     b.HasIndex("AddedByUserId");
 
-                    b.HasIndex("FamilyId");
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.BookCategory", b =>
-                {
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BookId", "CategoryId");
-
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("BookCategories");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Category", b =>
@@ -380,7 +356,7 @@ namespace ShelfShare.DataAccess.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.Family", b =>
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -391,50 +367,37 @@ namespace ShelfShare.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FamilyCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FamilyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("GroupType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<string>("JoinCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
-
-                    b.ToTable("Families");
+                    b.ToTable("Group");
                 });
 
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.FamilyMember", b =>
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.GroupMember", b =>
                 {
-                    b.Property<int>("FamilyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AppUserId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -449,11 +412,113 @@ namespace ShelfShare.DataAccess.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("FamilyId", "UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("AppUserId");
+                    b.HasKey("Id");
 
-                    b.ToTable("FamilyMembers");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("GroupId", "UserId")
+                        .IsUnique();
+
+                    b.HasIndex("Id", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("GroupMembers");
+                });
+
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Notification");
+                });
+
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Reading", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BookId1")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("BookId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Readings");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.ReadingGoal", b =>
@@ -463,9 +528,6 @@ namespace ShelfShare.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CompletedBooksCount")
                         .HasColumnType("int");
@@ -490,7 +552,7 @@ namespace ShelfShare.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ReadingGoals");
                 });
@@ -503,7 +565,7 @@ namespace ShelfShare.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppUserId")
+                    b.Property<int?>("AppUserId")
                         .HasColumnType("int");
 
                     b.Property<int>("BookId")
@@ -525,8 +587,14 @@ namespace ShelfShare.DataAccess.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ReadingId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ReviewDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("SuggestedToUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -540,55 +608,13 @@ namespace ShelfShare.DataAccess.Migrations
 
                     b.HasIndex("BookId");
 
+                    b.HasIndex("ReadingId");
+
+                    b.HasIndex("SuggestedToUserId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.UserBook", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CompletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CurrentPage")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UserId", "BookId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("UserBooks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -649,84 +675,98 @@ namespace ShelfShare.DataAccess.Migrations
                         .HasForeignKey("AddedByUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ShelfShare.Entity.Concrete.Family", "Family")
+                    b.HasOne("ShelfShare.Entity.Concrete.Category", "Category")
                         .WithMany("Books")
-                        .HasForeignKey("FamilyId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AddedByUser");
 
-                    b.Navigation("Family");
+                    b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.BookCategory", b =>
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.GroupMember", b =>
                 {
-                    b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
-                        .WithMany("BookCategories")
-                        .HasForeignKey("BookId")
+                    b.HasOne("ShelfShare.Entity.Concrete.Group", "Group")
+                        .WithMany("Members")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShelfShare.Entity.Concrete.Category", "Category")
-                        .WithMany("BookCategories")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "User")
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Notification", b =>
+                {
+                    b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
+                        .WithMany("Notifications")
+                        .HasForeignKey("BookId");
+
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "Receiver")
+                        .WithMany("ReceivedNotifications")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "Sender")
+                        .WithMany("SentNotifications")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Reading", b =>
+                {
+                    b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ShelfShare.Entity.Concrete.Book", null)
+                        .WithMany("Readings")
+                        .HasForeignKey("BookId1");
+
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "User")
+                        .WithMany("Readings")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.Family", b =>
-                {
-                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "Owner")
-                        .WithOne("OwnedFamily")
-                        .HasForeignKey("ShelfShare.Entity.Concrete.Family", "OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.FamilyMember", b =>
-                {
-                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "AppUser")
-                        .WithMany("FamilyMemberships")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShelfShare.Entity.Concrete.Family", "Family")
-                        .WithMany("Members")
-                        .HasForeignKey("FamilyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Family");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.ReadingGoal", b =>
                 {
-                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "User")
+                        .WithMany("ReadingGoals")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Review", b =>
                 {
-                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "AppUser")
-                        .WithMany("Reviews")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", null)
+                        .WithMany("SuggestedToUser")
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
                         .WithMany("Reviews")
@@ -734,63 +774,72 @@ namespace ShelfShare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("ShelfShare.Entity.Concrete.Reading", "Reading")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ReadingId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Book");
-                });
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "SuggestedToUser")
+                        .WithMany()
+                        .HasForeignKey("SuggestedToUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.UserBook", b =>
-                {
-                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "AppUser")
-                        .WithMany("UserBooks")
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("ShelfShare.Entity.Concrete.AppUser", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShelfShare.Entity.Concrete.Book", "Book")
-                        .WithMany("UserBooks")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
                     b.Navigation("Book");
+
+                    b.Navigation("Reading");
+
+                    b.Navigation("SuggestedToUser");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.AppUser", b =>
                 {
                     b.Navigation("AddedBooks");
 
-                    b.Navigation("FamilyMemberships");
+                    b.Navigation("GroupMembers");
 
-                    b.Navigation("OwnedFamily")
-                        .IsRequired();
+                    b.Navigation("ReadingGoals");
+
+                    b.Navigation("Readings");
+
+                    b.Navigation("ReceivedNotifications");
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("UserBooks");
+                    b.Navigation("SentNotifications");
+
+                    b.Navigation("SuggestedToUser");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Book", b =>
                 {
-                    b.Navigation("BookCategories");
+                    b.Navigation("Notifications");
+
+                    b.Navigation("Readings");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("UserBooks");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Category", b =>
                 {
-                    b.Navigation("BookCategories");
+                    b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("ShelfShare.Entity.Concrete.Family", b =>
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Group", b =>
                 {
-                    b.Navigation("Books");
-
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("ShelfShare.Entity.Concrete.Reading", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

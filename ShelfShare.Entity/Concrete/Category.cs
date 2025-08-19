@@ -10,10 +10,10 @@ namespace ShelfShare.Entity.Concrete
     public class Category : BaseEntity<int>
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public string ColorCode { get; set; }
 
         // Navigation Properties
-        public virtual ICollection<BookCategory> BookCategories { get; set; }
+        public virtual ICollection<Book> Books { get; set; }= new List<Book>();
     }
 }

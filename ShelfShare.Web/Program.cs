@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using ShelfShare.Business.Interfaces;
 using ShelfShare.Business.Mapping;
-using ShelfShare.Business.Services;
 using ShelfShare.DataAccess.Abstract;
 using ShelfShare.DataAccess.Concrete;
 using ShelfShare.DataAccess.Repository;
@@ -29,14 +29,9 @@ namespace ShelfShare.Web
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             // Repository'ler
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddScoped<IBookRepository, BookRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserBookRepository, UserBookRepository>();
 
             // Service'ler
-            builder.Services.AddScoped<IBookService, BookService>();
-            //builder.Services.AddScoped<IFamilyService, FamilyService>();
-            //builder.Services.AddScoped<IReviewService, ReviewService>();
+           
 
             // AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShelfShare.Business.DTOs.FamilyDto
 {
-    public class FamilyStatisticsDto
+    public class GroupStatisticsDto
     {
         public int TotalBooks { get; set; }
         public int TotalMembers { get; set; }

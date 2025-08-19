@@ -15,6 +15,6 @@ namespace ShelfShare.Entity.Concrete
         public int CompletedBooksCount { get; set; }
 
         // Navigation Properties
-        public virtual AppUser AppUser { get; set; }
+        public virtual AppUser User { get; set; }
     }
 }
