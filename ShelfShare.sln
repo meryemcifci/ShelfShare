@@ -11,24 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShelfShare.Entity", "ShelfS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShelfShare.Web", "ShelfShare.Web\ShelfShare.Web.csproj", "{26E5DAA6-D0BE-4F8A-8814-0F6A530489C8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		shelfshare-frontend\.editorconfig = shelfshare-frontend\.editorconfig
-		shelfshare-frontend\.gitattributes = shelfshare-frontend\.gitattributes
-		shelfshare-frontend\.gitignore = shelfshare-frontend\.gitignore
-		shelfshare-frontend\.prettierrc.json = shelfshare-frontend\.prettierrc.json
-		shelfshare-frontend\env.d.ts = shelfshare-frontend\env.d.ts
-		shelfshare-frontend\eslint.config.ts = shelfshare-frontend\eslint.config.ts
-		shelfshare-frontend\index.html = shelfshare-frontend\index.html
-		shelfshare-frontend\package-lock.json = shelfshare-frontend\package-lock.json
-		shelfshare-frontend\package.json = shelfshare-frontend\package.json
-		shelfshare-frontend\README.md = shelfshare-frontend\README.md
-		shelfshare-frontend\tsconfig.app.json = shelfshare-frontend\tsconfig.app.json
-		shelfshare-frontend\tsconfig.json = shelfshare-frontend\tsconfig.json
-		shelfshare-frontend\tsconfig.node.json = shelfshare-frontend\tsconfig.node.json
-		shelfshare-frontend\vite.config.ts = shelfshare-frontend\vite.config.ts
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

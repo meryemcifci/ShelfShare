@@ -3,11 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ShelfShare.Web</title>
+    <title>@ViewData["Title"] - ShelfShare</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ShelfShare.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -21,10 +20,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Kitaplar</a>
+                        </li>
+                       @*  Profil Dropdon Menü *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Profilim
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                                <li><a class="dropdown-item" asp-controller="Profiles" asp-action="MyProfile">Profilim</a></li>
+                                <li><a class="dropdown-item" asp-controller="Profiles" asp-action="MyBooks">Kitaplarım</a></li>
+                                <li><a class="dropdown-item" asp-controller="Reviews" asp-action="MyReviews">İncelemelerim</a></li>
+                                <li><a class="dropdown-item" asp-controller="ReadLists" asp-action="MyReadLists">Okuma Listem</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShelfShare.Business.Interfaces
+namespace ShelfShare.Business.Abstract
 {
     public interface IReviewService
     {

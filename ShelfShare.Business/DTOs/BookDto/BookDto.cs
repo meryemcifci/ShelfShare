@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace ShelfShare.Business.DTOs.BookDto
 {
-    public class BookDto
+    public record BookDto
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string CoverImageUrl { get; set; }
-        public int PageCount { get; set; }
-        public double AverageRating { get; set; }
-        public int ReviewCount { get; set; }
+        public int Id { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public string CoverImageUrl { get; init; }
+        public int PageCount { get; init; }
+        public double AverageRating { get;  init; }
+        public int ReviewCount { get; init; }
         public List<string> Categories { get; set; }
         public ReadingStatus? UserReadingStatus { get; set; } // Kullanıcının okuma durumu
     }

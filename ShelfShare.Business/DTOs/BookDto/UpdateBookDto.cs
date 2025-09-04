@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShelfShare.Business.DTOs.BookDto
 {
-    public record CreateBookDto
-    //C# 9 ile geldi record yapısı, immutable (değiştirilemez) veri taşıma nesneleri oluşturmak için kullanılır. 
-    //init;: Değişmemesi gereken, sadece oluşturulurken atanacak alanlar.
-    //set;: Daha sonra güncellenebilir alanlar.
+    public record UpdateBookDto
     {
         public string Title { get; init; }
         public string Author { get; init; }
@@ -22,5 +19,6 @@ namespace ShelfShare.Business.DTOs.BookDto
         public string Language { get; init; }
         public int FamilyId { get; set; }
         public List<int> CategoryIds { get; set; } = new List<int>();
+
     }
 }
