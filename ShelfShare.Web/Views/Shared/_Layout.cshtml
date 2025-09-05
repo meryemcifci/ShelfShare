@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using ShelfShare.Entity.Concrete
+@inject UserManager<AppUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,12 +12,21 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <style>
+        .navbar{
+            position: sticky;
+            top: 0;
+        }
+    </style> *@
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ShelfShare.Web</a>
+                <!-- Logo olarak resim eklenmesi ve anasayfaya yönlendirme -->
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/ShelfShare_AcikTema.jpg" alt="ShelfShare" height="50">
+                </a> 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,7 +45,15 @@
                        @*  Profil Dropdon Menü *@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Profilim
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    var user = await UserManager.GetUserAsync(User);
+                                    @String.Concat(user.FirstName, " ", user.LastName)
+                                }
+                                else
+                                {
+                                    <text>Profilim</text>
+                                }
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
                                 <li><a class="dropdown-item" asp-controller="Profiles" asp-action="MyProfile">Profilim</a></li>
@@ -40,6 +62,7 @@
                                 <li><a class="dropdown-item" asp-controller="ReadLists" asp-action="MyReadLists">Okuma Listem</a></li>
                             </ul>
                         </li>
+                        <partial name="_LoginPartial" />
                     </ul>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ShelfShare.DataAccess.Concrete;
 using ShelfShare.Web.Models;
 using System.Diagnostics;
 
@@ -7,10 +8,12 @@ namespace ShelfShare.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly Context _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, Context context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShelfShare.DataAccess.Concrete
 {
-    public class Context : IdentityDbContext<AppUser, IdentityRole<int>, int>
+    public class Context : IdentityDbContext<AppUser, AppRole, int>
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {

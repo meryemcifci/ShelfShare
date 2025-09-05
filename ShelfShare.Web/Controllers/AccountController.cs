@@ -39,42 +39,60 @@ namespace ShelfShare.Web.Controllers
             }
             return View(model);
         }
-
+        
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, IFormFile ProfileImage)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            string profileImageUrl = "/images/default-profile.png";
+
+            if (ProfileImage != null && ProfileImage.Length > 0)
             {
-                AppUser appUser = new AppUser
-                {
-                    FirstName = model.Name,
-                    LastName = model.Name,
-                    Email = model.Email,
-                    UserName = model.Email,
-                };
+                var fileName = Path.GetFileName(ProfileImage.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
-                var result = await userManager.CreateAsync(appUser, model.Password);
-
-                if (result.Succeeded)
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    return RedirectToAction("Login", "Account");
+                    await ProfileImage.CopyToAsync(stream);
                 }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
 
-                    return View(model);
-                }
+                profileImageUrl = "/images/" + fileName;
             }
-            return View(model);
+
+            AppUser appUser = new AppUser
+            {
+                FirstName = model.Name,
+                LastName = model.Name,
+                Email = model.Email,
+                UserName = model.Email,
+                ProfileImageUrl = profileImageUrl,
+
+            };
+
+            var result = await userManager.CreateAsync(appUser, model.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+            
+            
         }
 
         public IActionResult VerifyEmail()
