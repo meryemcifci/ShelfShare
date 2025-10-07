@@ -1,12 +1,79 @@
 body.dark-theme {
-    background-color: #14181C;
-    color: white;
+    background-color: #352F44;
+    color: #FAF0E6;
 }
 
 body.light-theme {
-    background-color: #717F8E;
-    color: black;
+    background-color: #FAF0E6;
+    color: #352F44;
 }
-div_theme{
 
+body.light-theme .navbar {
+    background-color: #FAF0E6 !important;
+    color: #352F44 !important;
+}
+
+body.dark-theme .navbar {
+    background-color: #352F44 !important;
+    color: #FAF0E6 !important;
+}
+
+/* Navbar linkleri */
+body.light-theme .navbar .nav-link {
+    color: #352F44 !important;
+}
+
+body.dark-theme .navbar .nav-link {
+    color: #FAF0E6 !important;
+}
+
+/* Footer */
+body.dark-theme footer {
+    background-color: #352F44;
+    color: #FAF0E6;
+}
+
+body.light-theme footer {
+    background-color: #FAF0E6;
+    color: #352F44;
+}
+
+/* Footer linkleri */
+body.light-theme footer .container {
+    color: #352F44 !important;
+}
+
+body.dark-theme footer .container {
+    color: #FAF0E6 !important;
+}
+
+.navbar-brand img {
+   
+    height: 50px;
+    width: 50px;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 50%; 
+    display: block;
+    margin-right: 16px;
+    background: none !important;
+   
+}
+
+.navbar-brand {
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.div_theme i.material-icons {
+   
+    font-size: 28px;
+    color: var(--bs-dark);
+    transition: color 0.3s;
 }

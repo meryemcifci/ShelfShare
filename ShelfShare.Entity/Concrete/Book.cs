@@ -9,15 +9,15 @@ namespace ShelfShare.Entity.Concrete
 {
     public class Book: BaseEntity<int>
     {
-        public string Title { get; set; }
-        public string Author { get; set; }
+        public string Title { get; set; }//burası var
+        public string Author { get; set; }//burası var
         public string ISBN { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; }//burası var (!)
         public string CoverImageUrl { get; set; }
         public int PageCount { get; set; }
         public DateTime PublishDate { get; set; }
-        public string Publisher { get; set; }
-        public string Language { get; set; }
+        public string Publisher { get; set; }//burası var
+        public string Language { get; set; }//burası var
         public int FamilyId { get; set; }
         public int AddedByUserId { get; set; }
 

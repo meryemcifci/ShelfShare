@@ -4,7 +4,7 @@
 @inject SignInManager<AppUser> SignInManager
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="@ViewBag.Theme">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,15 +12,18 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="light-theme">
-    <header class="site-header">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="justify-content:center;">
+    <header class="site-header" >
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style=" justify-content:space-between;">
             <div class="container-fluid">
                 <!-- Logo olarak resim eklenmesi ve anasayfaya yönlendirme -->
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/ShelfShare_AcikTema.png" alt="ShelfShare" height="50">
+                    <img src="~/images/ShelfShare-AcikTema.png" alt="ShelfShare" >
                 </a> 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -31,16 +34,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Kitaplar</a>
-                        </li>
-                        
+                      
                         @*  Profil Dropdon Menü *@
                         @if (User.Identity.IsAuthenticated)
                         {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Kütüphane</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown"
                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,12 +68,12 @@
                         }  
                         <partial name="_LoginPartial" />
                     </ul>
+                    <div class="div_theme">
+                        <i class="material-icons" id="themeToggle">light_mode</i>
+                    </div>
                 </div>
             </div>
         </nav>
-        <div class="div_theme">
-            <i class="material-icons" id="themeToggle">light_mode</i>
-        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -84,25 +86,38 @@
             &copy; 2025 - ShelfShare.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script>
         const body = document.body;
         const btn = document.getElementById("themeToggle");
 
+        const savedTheme = localStorage.getItem("theme") || "light-theme";
+        body.classList.remove("light-theme", "dark-theme");
+        body.classList.add(savedTheme);
+        btn.textContent = savedTheme === "light-theme" ? "light_mode" : "dark_mode";
+
         btn.addEventListener("click", () => {
             if (body.classList.contains("light-theme")) {
-                body.classList.remove("light-theme");
-                body.classList.add("dark-theme");
-                btn.textContent = "dark_mode"; 
+                body.classList.replace("light-theme", "dark-theme");
+                btn.textContent = "dark_mode";
+                localStorage.setItem("theme", "dark-theme");
             } else {
-                body.classList.remove("dark-theme");
-                body.classList.add("light-theme");
-                btn.textContent = "light_mode"; 
+                body.classList.replace("dark-theme", "light-theme");
+                btn.textContent = "light_mode";
+                localStorage.setItem("theme", "light-theme");
             }
         });
+
+        const logo = document.querySelector(".navbar-brand img");
+
+        if (savedTheme === "dark-theme") {
+            logo.src = "/images/ShelfShare-KoyuTema.png";
+        } else {
+            logo.src = "/images/ShelfShare-AcikTema.png";
+        }
+
     </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
