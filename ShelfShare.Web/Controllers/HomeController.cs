@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using ShelfShare.DataAccess.Concrete;
 using ShelfShare.Web.Models;
 using System.Diagnostics;
@@ -31,5 +32,9 @@ namespace ShelfShare.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
+
+

@@ -167,6 +167,7 @@ namespace ShelfShare.Web.Controllers
             }
         }
 
+
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
@@ -174,3 +175,5 @@ namespace ShelfShare.Web.Controllers
         }
     }
 }
+
+

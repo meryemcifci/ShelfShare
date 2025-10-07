@@ -2,20 +2,22 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<AppUser> signInManager;
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <ul class="navbar-nav ms-auto">
     @if (signInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout"><span class="glyphicon">&#xe163;</span> @* <img src="~/images/logout.png" alt="Login" /> *@Logout</a>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-        </li>
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">  <span class="glyphicon">&#xe161;</span> @* <i style='font-size:24px' class='fas'>&#xf406;</i> *@</a>
+        </li>@* 
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-        </li>
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register"><i style='font-size:24px' class='fas'>&#xf234;</i></a>
+        </li> *@
     }
 </ul>

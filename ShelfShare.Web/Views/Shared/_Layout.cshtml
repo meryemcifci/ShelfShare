@@ -12,20 +12,15 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @* <style>
-        .navbar{
-            position: sticky;
-            top: 0;
-        }
-    </style> *@
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+<body class="light-theme">
+    <header class="site-header">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="justify-content:center;">
             <div class="container-fluid">
                 <!-- Logo olarak resim eklenmesi ve anasayfaya yönlendirme -->
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/ShelfShare_AcikTema.jpg" alt="ShelfShare" height="50">
+                    <img src="~/images/ShelfShare_AcikTema.png" alt="ShelfShare" height="50">
                 </a> 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -42,31 +37,41 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Kitaplar</a>
                         </li>
-                       @*  Profil Dropdon Menü *@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    var user = await UserManager.GetUserAsync(User);
-                                    @String.Concat(user.FirstName, " ", user.LastName)
-                                }
-                                else
-                                {
-                                    <text>Profilim</text>
-                                }
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                                <li><a class="dropdown-item" asp-controller="Profiles" asp-action="MyProfile">Profilim</a></li>
-                                <li><a class="dropdown-item" asp-controller="Profiles" asp-action="MyBooks">Kitaplarım</a></li>
-                                <li><a class="dropdown-item" asp-controller="Reviews" asp-action="MyReviews">İncelemelerim</a></li>
-                                <li><a class="dropdown-item" asp-controller="ReadLists" asp-action="MyReadLists">Okuma Listem</a></li>
-                            </ul>
-                        </li>
+                        
+                        @*  Profil Dropdon Menü *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        var user = await UserManager.GetUserAsync(User);
+                                        @user.FirstName
+                                    }
+                                    else
+                                    {
+                                        <text>Profilim</text>
+                                    }
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="/Account/Profile">Profilim</a></li>
+                                    <li><a class="dropdown-item" href="/Books/MyBooks">Kitaplarım</a></li>
+                                    <li><a class="dropdown-item" href="/Reviews/MyReviews">İncelemelerim</a></li>
+                                    <li><a class="dropdown-item" href="/ReadingList">Okuma Listem</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="/Account/Logout">Çıkış Yap</a></li>
+                                </ul>
+                            </li>
+                        }  
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="div_theme">
+            <i class="material-icons" id="themeToggle">light_mode</i>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -82,6 +87,22 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const body = document.body;
+        const btn = document.getElementById("themeToggle");
+
+        btn.addEventListener("click", () => {
+            if (body.classList.contains("light-theme")) {
+                body.classList.remove("light-theme");
+                body.classList.add("dark-theme");
+                btn.textContent = "dark_mode"; 
+            } else {
+                body.classList.remove("dark-theme");
+                body.classList.add("light-theme");
+                btn.textContent = "light_mode"; 
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
