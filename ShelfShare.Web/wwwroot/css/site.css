@@ -18,7 +18,7 @@ body.dark-theme .navbar {
     color: #FAF0E6 !important;
 }
 
-/* Navbar linkleri */
+ Navbar linkleri 
 body.light-theme .navbar .nav-link {
     color: #352F44 !important;
 }
@@ -26,6 +26,7 @@ body.light-theme .navbar .nav-link {
 body.dark-theme .navbar .nav-link {
     color: #FAF0E6 !important;
 }
+
 
 /* Footer */
 body.dark-theme footer {

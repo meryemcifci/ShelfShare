@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ShelfShare.Business.Abstract
 {
-    public interface IBookService
+    public interface IBookService// Controller bu sınıfla ilgilenir BookService iş mantığını içerir.
     {
         Task<Book> GetAsync(int id);
         Task<PaginatedResult<Book>> SearchAsync(string q, int page);
@@ -19,6 +19,7 @@ namespace ShelfShare.Business.Abstract
         Task UpdateAsync(int id, UpdateBookDto dto);
         Task DeleteAsync(int id);
         Task<double> GetAverageRatingAsync(int bookId);
+        List<BookDto> GetAllBooks();
     }
 
 }

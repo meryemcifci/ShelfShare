@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using ShelfShare.Business.Abstract;
+using ShelfShare.Business.Concrete;
 using ShelfShare.DataAccess.Concrete;
 using ShelfShare.Web.Models;
+using ShelfShare.Web.ViewModels;
 using System.Diagnostics;
 
 namespace ShelfShare.Web.Controllers
@@ -15,9 +18,18 @@ namespace ShelfShare.Web.Controllers
         {
             _logger = logger;
             _context = context;
+           
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
         {
             return View();
         }
@@ -32,7 +44,6 @@ namespace ShelfShare.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
     }
 }
