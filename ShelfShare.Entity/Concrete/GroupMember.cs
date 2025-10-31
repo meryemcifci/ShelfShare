@@ -11,7 +11,7 @@ namespace ShelfShare.Entity.Concrete
     {
         public int GroupId { get; set; }
         public int UserId { get; set; }
-        public DateTime JoinedDate { get; set; }
+        public DateTime? JoinedDate { get; set; }
         public FamilyMemberRole Role { get; set; }
 
         // Navigation Properties

@@ -1,8 +1,47 @@
-﻿
+﻿@model List<ShelfShare.Entity.Concrete.Reading>
 @{
     ViewData["Title"] = "MyBooks";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyBooks</h1>
+<main class="main">
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Kitaplarım</h2>
+            <p>Okuduğum ve okuyacak kitaplarım.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+            <div class="row">
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var reading in Model)
+                    {
+                        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                                <h3 class="resume-title">Okuduklarım</h3>
+                                <div class="resume-item">
+                                    <h4>@reading.Book?.Title - @reading.Book?.Author</h4>
+                                    <h5>@reading.StartDate.Value.ToString("dd.MM.yyyy") / @reading.EndDate.Value.ToString("dd.MM.yyyy")</h5>
+                                    <p><em>@reading.Book?.Description</em></p>
+                                </div><!-- Edn Resume Item -->
+                            </div>
+
+                        </div>
+
+                    }
+                }
+            </div>
+
+        </div>
+
+    </section><!-- /Resume Section -->
+
+</main>
 

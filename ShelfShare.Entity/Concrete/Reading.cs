@@ -14,7 +14,7 @@ namespace ShelfShare.Entity.Concrete
         public int UserId { get; set; }
         public AppUser User { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool IsActive { get; set; } // Şu an okunuyor mu?
 

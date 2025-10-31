@@ -40,9 +40,22 @@ namespace ShelfShare.Web.Controllers
             return View(userDto);
         }
 
-        public IActionResult MyBooks()
+        public async Task<IActionResult> MyBooks()
         {
-            return View();
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+                return Unauthorized();
+
+            // string'i int'e çeviriyoruz
+            if (!int.TryParse(userIdString, out int userId))
+                return BadRequest("Kullanıcı ID geçersiz.");
+
+            var reviews = await _context.Readings
+                .Include(r => r.Book)
+                .Where(r => r.UserId == userId)
+                .ToListAsync();
+
+            return View(reviews);
         }
 
         public async Task<IActionResult> MyReviews()

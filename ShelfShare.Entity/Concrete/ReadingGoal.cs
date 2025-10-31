@@ -10,9 +10,9 @@ namespace ShelfShare.Entity.Concrete
     public class ReadingGoal : BaseEntity<int>
     {
         public int UserId { get; set; }
-        public int Year { get; set; }
-        public int TargetBooksCount { get; set; }
-        public int CompletedBooksCount { get; set; }
+        public int? Year { get; set; }
+        public int? TargetBooksCount { get; set; }
+        public int? CompletedBooksCount { get; set; }
 
         // Navigation Properties
         public virtual AppUser User { get; set; }

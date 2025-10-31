@@ -12,9 +12,9 @@ namespace ShelfShare.Entity.Concrete
         public int UserId { get; set; }        // AppUser FK
         public int BookId { get; set; }           // Book FK
         public int Rating { get; set; }           // 1-5 yıldız
-        public string Comment { get; set; }       // yorum metni
+        public string? Comment { get; set; }       // yorum metni
         public bool IsPublic { get; set; }
-        public DateTime ReviewDate { get; set; }
+        public DateTime? ReviewDate { get; set; }
 
         public int? ReadingId { get; set; }       // Reading FK
         public int? SuggestedToUserId { get; set; } // önerilen kullanıcı FK

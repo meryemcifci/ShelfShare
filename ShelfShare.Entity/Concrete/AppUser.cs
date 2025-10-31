@@ -19,7 +19,7 @@ namespace ShelfShare.Entity.Concrete
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ProfileImageUrl { get; set; }
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         public UserRole Role { get; set; }
 
         // Navigation Properties
