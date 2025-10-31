@@ -13,9 +13,14 @@ namespace ShelfShare.Web
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
+
+            // AutoMapper servisini ekle
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -27,7 +32,8 @@ namespace ShelfShare.Web
             // Identity servislerini ekle
             builder.Services.AddIdentity<AppUser, AppRole>()
              .AddEntityFrameworkStores<Context>()
-             .AddDefaultTokenProviders();
+             .AddDefaultTokenProviders()
+             .AddSignInManager();
 
             // Cookie ayarlarý
             builder.Services.ConfigureApplicationCookie(opt =>
@@ -35,6 +41,7 @@ namespace ShelfShare.Web
                 opt.LoginPath = "/Auth/Login";
                 opt.AccessDeniedPath = "/Auth/AccessDenied";
             });
+
 
             // Repository'ler
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

@@ -1,0 +1,35 @@
+@model ShelfShare.Business.DTOs.BookDto.BookDto
+@{
+    ViewData["Title"] = Model?.Title ?? "Kitap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="@(string.IsNullOrWhiteSpace(Model?.CoverImageUrl) ? Url.Content("~/images/placeholder-book.jpg") : Model!.CoverImageUrl)" alt="@(Model?.Title ?? "Kitap")" class="img-fluid rounded" />
+            </div>
+            <div class="col-md-7">
+                <h2>@(Model?.Title ?? "Başlık Yok")</h2>
+                <p class="text-muted mb-1">@(Model?.Author ?? "Yazar Yok")</p>
+                @if (Model?.UserReadingStatus == ShelfShare.Entity.Concrete.ReadingStatus.Reading)
+                {
+                    <span class="badge bg-success">Okunuyor</span>
+                }
+                <hr />
+                <p>@(Model?.Description ?? "Açıklama Yok")</p>
+                @if (Model?.Categories?.Any() == true)
+                {
+                    <p class="mb-0"><strong>Tür:</strong> @string.Join(", ", Model.Categories)</p>
+                }
+                @if (Model?.PageCount != null)
+                {
+                    <p class="mb-0"><strong>Sayfa:</strong> @Model.PageCount</p>
+                }
+            </div>
+        </div>
+    </div>
+</main>
+
+

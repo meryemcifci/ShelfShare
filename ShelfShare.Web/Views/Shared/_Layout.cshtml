@@ -2,145 +2,119 @@
 @using ShelfShare.Entity.Concrete
 @inject UserManager<AppUser> UserManager
 @inject SignInManager<AppUser> SignInManager
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] - ShelfShare</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect">
-<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-<!-- Vendor CSS Files -->
-<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-<link href="assets/vendor/aos/aos.css" rel="stylesheet">
-<link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-<link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/glightbox/css/glightbox.css" rel="stylesheet" />
 
-<!-- Main CSS File -->
-<link href="assets/css/main.css" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link href="~/kelly-1.0.0/kelly-1.0.0/assets/css/main.css" rel="stylesheet" />
 
-<header id="header" class="header d-flex align-items-center light-background sticky-top">
-    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+</head>
+<body>
+    <header id="header" class="header d-flex align-items-center light-background sticky-top">
+        <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-@*             <img src="~/images/ShelfShare-AcikTema.png" alt="ShelfShare">
- *@            <h1 class="sitename">Shelf Share</h1>
-        </a>
+            <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+    @*             <img src="~/images/ShelfShare-AcikTema.png" alt="ShelfShare">
+     *@            <h1 class="sitename">Shelf Share</h1>
+            </a>
 
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                <li><a asp-area ="" asp-controller="Home" asp-action="Index">Anasayfa</a></li>
-                <li><a asp-area ="" asp-controller="Home" asp-action="About">Hakkımızda</a></li>
-                <li><a asp-area ="" asp-controller="Home" asp-action="Contact">İletişim</a></li>
+            <nav id="navmenu" class="navmenu">
+                <ul>
 
-                 @if (User.Identity.IsAuthenticated)
-                 {
+                    <li><a asp-area ="" asp-controller="Home" asp-action="Index">Anasayfa</a></li>
+                    <li><a asp-area ="" asp-controller="Home" asp-action="About">Hakkımızda</a></li>
+                    <li><a asp-area ="" asp-controller="Home" asp-action="Contact">İletişim</a></li>
 
-                    <li><a asp-area="" asp-controller="Library" asp-action="Index">Kütüphanem</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown"
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                var user = await UserManager.GetUserAsync(User);
-                                @user.FirstName
-                            }
-                            else
-                            {
-                                <text>Profilim</text>
-                            }
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="/Account/Profile">Profilim</a></li>
-                            <li><a class="dropdown-item" href="/Books/MyBooks">Kitaplarım</a></li>
-                            <li><a class="dropdown-item" href="/Reviews/MyReviews">İncelemelerim</a></li>
-                            <li><a class="dropdown-item" href="/ReadingList">Okuma Listem</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="/Account/Logout">Çıkış Yap</a></li>
-                        </ul>
-                    </li>
-                }
-                <partial name="_LoginPartial" />
-            </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+                      @if (User.Identity.IsAuthenticated)
+                     { 
 
-        <div class="header-social-links">
-            <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        <li><a asp-area="" asp-controller="Library" asp-action="Index">Kütüphanem</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    var user = await UserManager.GetUserAsync(User);
+                                    @user.FirstName
+                                }
+                                else
+                                {
+                                    <text>Profilim</text>
+                                }
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="/User/Profile">Profilim</a></li>
+                                <li><a class="dropdown-item" href="/User/MyBooks">Kitaplarım</a></li>
+                                <li><a class="dropdown-item" href="/User/MyReviews">İncelemelerim</a></li>
+                                <li><a class="dropdown-item" href="/User/ReadingList">Okuma Listem</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="/Account/Logout">Çıkış Yap</a></li>
+                            </ul>
+                        </li>
+                     } 
+                    <partial name="_LoginPartial" />
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+
+            <div class="header-social-links">
+                <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+
+        </div>
+    </header>
+    @RenderBody()
+   
+    <footer id="footer" class="footer light-background">
+
+        <div class="container">
+            <div class="copyright text-center ">
+                &copy; 2025 - ShelfShare.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+            <div class="social-links d-flex justify-content-center">
+                <a href=""><i class="bi bi-twitter-x"></i></a>
+                <a href=""><i class="bi bi-facebook"></i></a>
+                <a href=""><i class="bi bi-instagram"></i></a>
+                <a href=""><i class="bi bi-linkedin"></i></a>
+            </div>
         </div>
 
-    </div>
-</header>
+    </footer>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+   
 
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+    <!-- Vendor JS Files -->
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/php-email-form/validate.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/aos/aos.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/waypoints/noframework.waypoints.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 
-<footer id="footer" class="footer light-background">
-
-    <div class="container">
-        <div class="copyright text-center ">
-            &copy; 2025 - ShelfShare.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-        <div class="social-links d-flex justify-content-center">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
-        </div>
-    </div>
-
-</footer>
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-
-<!-- Vendor JS Files -->
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script src="assets/vendor/aos/aos.js"></script>
-<script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-<script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-
-<!-- Main JS File -->
-<script src="assets/js/main.js"></script>
-<script>
-    const body = document.body;
-    const btn = document.getElementById("themeToggle");
-
-    const savedTheme = localStorage.getItem("theme") || "light-theme";
-    body.classList.remove("light-theme", "dark-theme");
-    body.classList.add(savedTheme);
-    btn.textContent = savedTheme === "light-theme" ? "light_mode" : "dark_mode";
-
-    btn.addEventListener("click", () => {
-        if (body.classList.contains("light-theme")) {
-            body.classList.replace("light-theme", "dark-theme");
-            btn.textContent = "dark_mode";
-            localStorage.setItem("theme", "dark-theme");
-        } else {
-            body.classList.replace("dark-theme", "light-theme");
-            btn.textContent = "light_mode";
-            localStorage.setItem("theme", "light-theme");
-        }
-    });
-
-    const logo = document.querySelector(".navbar-brand img");
-
-    if (savedTheme === "dark-theme") {
-        logo.src = "/images/ShelfShare-KoyuTema.png";
-    } else {
-        logo.src = "/images/ShelfShare-AcikTema.png";
-    }
-
-</script>
-
-@await RenderSectionAsync("Scripts", required: false)
+    <!-- Main JS File -->
+    <script src="~/kelly-1.0.0/kelly-1.0.0/assets/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

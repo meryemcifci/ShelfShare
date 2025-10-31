@@ -24,7 +24,6 @@ namespace ShelfShare.DataAccess.Concrete
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Reading> Readings { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // 🔹 User - GroupMember (Many-to-Many gibi ama ara tablo GroupMember ile)

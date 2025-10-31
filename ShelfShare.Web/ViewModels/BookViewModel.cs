@@ -4,7 +4,7 @@ namespace ShelfShare.Web.ViewModels
 {
     public class BookViewModel
     {
-        public List<BookDto> Books { get; set; }
+        public List<BookDto> Books { get; set; }//Kitap listesi
         public string SearchTerm { get; set; }
     }
 }

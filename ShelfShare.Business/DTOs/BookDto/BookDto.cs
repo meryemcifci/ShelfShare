@@ -10,13 +10,14 @@ namespace ShelfShare.Business.DTOs.BookDto
     public record BookDto
     {
         public int Id { get; init; }
-        public string Title { get; init; }
-        public string Author { get; init; }
-        public string CoverImageUrl { get; init; }
-        public int PageCount { get; init; }
-        public double AverageRating { get;  init; }
-        public int ReviewCount { get; init; }
-        public List<string> Categories { get; set; }
+        public string? Title { get; init; }
+        public string? Author { get; init; }
+        public string? CoverImageUrl { get; init; }
+        public string? Description { get; set; }
+        public int? PageCount { get; init; }
+        public double? AverageRating { get;  init; }
+        public int? ReviewCount { get; init; }
+        public List<string> Categories { get; set; } = new List<string>();
         public ReadingStatus? UserReadingStatus { get; set; } // Kullanıcının okuma durumu
     }
 }

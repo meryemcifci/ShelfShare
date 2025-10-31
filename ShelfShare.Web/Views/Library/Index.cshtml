@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ShelfShare.Business.DTOs.BookDto.BookDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<main>
+
+    <link rel="stylesheet" href="~/css/library.css" />
+
+    <section class="library-section">
+        <div class="container">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>Kütüphanem</h2>
+                <p>Evde bulunan tüm kitaplar burada listelenir.</p>
+            </div><!-- End Section Title -->
+
+            @{
+                Func<List<string>, string> firstOr = (List<string> list) => list?.FirstOrDefault() ?? string.Empty;
+                var categories = Model?.SelectMany(m => m.Categories).Where(c => !string.IsNullOrWhiteSpace(c)).Distinct().OrderBy(c => c).ToList() ?? new List<string>();
+            }
+
+            <div class="library-filters">
+                <button class="library-filter" data-filter="*">Hepsi</button>
+                <button class="library-filter secondary" data-filter="roman">Roman</button>
+                <button class="library-filter secondary" data-filter="çocuk">Çocuk</button>
+                <button class="library-filter secondary" data-filter="distopya">Distopya</button>
+                <button class="library-filter secondary" data-filter="öykü">Öykü</button>
+            </div>
+
+            <div class="library-grid">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var book in Model)
+                    {
+                        var displayCat = firstOr(book.Categories) ?? string.Empty;
+                        var descNorm = (book.Description ?? string.Empty).Trim().ToLowerInvariant();
+                        <div class="library-card" data-category="@descNorm">
+                            <img src="@(string.IsNullOrWhiteSpace(book.CoverImageUrl) ? Url.Content("~/images/BenimÜniversitelerim.jpg") : book.CoverImageUrl)" alt="@(book.Title ?? "Kitap")">
+                            <div class="content">
+                                <h4 class="title">@(book.Title ?? "Başlık Yok")</h4>
+                                <div class="meta">@(book.Author ?? "Yazar Yok")</div>
+                                <div class="meta">@(book.Description ?? "Türü Belirtilmemiş")</div>
+                                @if (!string.IsNullOrWhiteSpace(displayCat))
+                                {
+                                    <div class="meta">@displayCat</div>
+                                }
+                                @if (book.UserReadingStatus == ShelfShare.Entity.Concrete.ReadingStatus.Reading)
+                                {
+                                    <div class="meta" style="color:#20c997;">Okunuyor</div>
+                                }
+                                <div class="d-flex gap-2 mt-2">
+                                    <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Details", "Library", new { id = book.Id })">Kitap Detay</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#" data-add-book-id="@book.Id">Ekle</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+
+        </div>
+    </section>
+
+    <script src="~/js/library.js"></script>
+</main>

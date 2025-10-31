@@ -13,7 +13,8 @@ namespace ShelfShare.Business.DTOs.CommonDto
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int Role{ get; set; }
         public string ProfileImageUrl { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
+        public DateTime? Birthdate { get; set; }        
     }
 }
