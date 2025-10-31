@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShelfShare.Business.DTOs.CommonDto;
 using ShelfShare.DataAccess.Concrete;
 using ShelfShare.Entity.Concrete;
+using System.Security.Claims;
 
 namespace ShelfShare.Web.Controllers
 {
@@ -37,14 +39,30 @@ namespace ShelfShare.Web.Controllers
             UserDto userDto = _mapper.Map<UserDto>(user);
             return View(userDto);
         }
+
         public IActionResult MyBooks()
         {
             return View();
         }
-        public IActionResult MyReviews()
+
+        public async Task<IActionResult> MyReviews()
         {
-            return View();
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+                return Unauthorized();
+
+            // string'i int'e çeviriyoruz
+            if (!int.TryParse(userIdString, out int userId))
+                return BadRequest("Kullanıcı ID geçersiz.");
+
+            var reviews = await _context.Reviews
+                .Include(r => r.Book)
+                .Where(r => r.UserId == userId)
+                .ToListAsync();
+
+            return View(reviews);
         }
+
         public IActionResult ReadingList()
         {
             return View();
