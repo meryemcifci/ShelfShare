@@ -1,0 +1,20 @@
+﻿@model ShelfShare.Entity.Concrete.Group
+@{
+    ViewData["Title"] = "AddToGroups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="AddToGroups" method="post">
+    <input type="hidden" name="bookId" value="@Model.Id" />
+
+    <label>Kitabı hangi gruplara eklemek istiyorsun?</label>
+    <select name="groupIds" multiple class="form-control">
+      @*   @foreach (var group in ViewBag.Groups as List<Group>)
+        {
+            <option value="@group.Id">@group.Name</option>
+        } *@
+    </select>
+
+    <button type="submit" class="btn btn-success mt-2">Kaydet</button>
+</form>
+

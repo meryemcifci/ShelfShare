@@ -23,6 +23,9 @@ namespace ShelfShare.DataAccess.Concrete
         public DbSet<ReadingGoal> ReadingGoals { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Reading> Readings { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<Group> Group { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,7 +82,13 @@ namespace ShelfShare.DataAccess.Concrete
                 .HasForeignKey(rv => rv.SuggestedToUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-           
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.ReadingGoals)
+                .WithOne(g => g.User)
+                .HasForeignKey(g => g.UserId);
+
+
+
             // 🔹 User - Notification (1 kullanıcının birçok bildirimi olabilir)
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Receiver)
@@ -94,17 +103,38 @@ namespace ShelfShare.DataAccess.Concrete
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Book - Group
+           
+
             modelBuilder.Entity<Book>()
-                 .HasOne(b => b.AddedByUser)
-                 .WithMany(u => u.AddedBooks) // şimdi tipler uyumlu
-                 .HasForeignKey(b => b.AddedByUserId)
-                 .IsRequired(false)
-                 .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(b => b.Groups)
+                .WithMany(g => g.Books)
+                .UsingEntity<Dictionary<string, object>>(
+                    "BookGroup", // ara tablo adı
+                    j => j.HasOne<Group>().WithMany().HasForeignKey("GroupId"),
+                    j => j.HasOne<Book>().WithMany().HasForeignKey("BookId"),
+                    j =>
+                    {
+                        j.HasKey("BookId", "GroupId");
+                        j.ToTable("BookGroups"); // tablo adı
+                    });
 
             // GroupMember unique (bir user bir gruba 1 kez katılabilir)
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new { gm.Id, gm.UserId })
                 .IsUnique();
+
+            modelBuilder.Entity<UserGroup>()
+                .HasKey(ug => new { ug.UserId, ug.GroupId });
+
+            modelBuilder.Entity<UserGroup>()
+                .HasOne(ug => ug.User)
+                .WithMany(u => u.UserGroups)
+                .HasForeignKey(ug => ug.UserId);
+
+            modelBuilder.Entity<UserGroup>()
+                .HasOne(ug => ug.Group)
+                .WithMany(g => g.UserGroups)
+                .HasForeignKey(ug => ug.GroupId);
 
             // Soft delete filter
             modelBuilder.Entity<AppUser>().HasQueryFilter(u => !u.IsDeleted);

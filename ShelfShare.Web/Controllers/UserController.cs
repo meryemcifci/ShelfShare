@@ -30,15 +30,38 @@ namespace ShelfShare.Web.Controllers
 
         public async Task<IActionResult> Profile()
         {
-            AppUser user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.Users
+                .Include(u => u.ReadingGoals) 
+                .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user == null)
-            {
                 return RedirectToAction("Login");
-            }
-            UserDto userDto = _mapper.Map<UserDto>(user);
+
+            // Grup bilgileri
+            var userGroups = await _context.UserGroups
+                .Include(ug => ug.Group)
+                .Where(ug => ug.UserId == user.Id)
+                .Select(ug => ug.Group.Name)
+                .ToListAsync();
+
+            // Kullanıcının ilk veya aktif okuma hedefi
+            var readingGoal = user.ReadingGoals?.FirstOrDefault();
+
+            // DTO oluşturdum.
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Birthdate=user.BirthDate,
+                ProfileImageUrl=user.ProfileImageUrl,
+                TargetBooksCount = readingGoal?.TargetBooksCount ?? 0,
+                CompletedBooksCount = readingGoal?.CompletedBooksCount ?? 0,
+                GroupNames = userGroups
+            };
+
             return View(userDto);
         }
+
 
         public async Task<IActionResult> MyBooks()
         {

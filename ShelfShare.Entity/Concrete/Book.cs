@@ -20,13 +20,18 @@ namespace ShelfShare.Entity.Concrete
         public int? FamilyId { get; set; }
         public int? AddedByUserId { get; set; }
         public int? CategoryId { get; set; }
+        public int? GroupId { get; set; }
+
 
         // Navigation Properties
 
         public virtual AppUser AddedByUser { get; set; } = new AppUser();
         public virtual Category Category { get; set; }= new Category();
+        public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
         public virtual ICollection<Review> Reviews { get; set; }= new List<Review>();
         public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public virtual ICollection<Reading> Readings { get; set; } = new List<Reading>();
+
+
     }
 }

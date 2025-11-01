@@ -12,7 +12,9 @@ namespace ShelfShare.Entity.Concrete
         public GroupType GroupType { get; set; } // Family, Friendly, Custom
         public string JoinCode { get; set; } // Davet kodu
 
-
+        public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<UserGroup> UserGroups { get; set; }
+       
         public ICollection<GroupMember> Members { get; set; }
         
     }

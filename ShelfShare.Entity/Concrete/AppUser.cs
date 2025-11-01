@@ -36,6 +36,8 @@ namespace ShelfShare.Entity.Concrete
 
         public virtual ICollection<Reading> Readings { get; set; } = new List<Reading>();
 
+
+        public ICollection<UserGroup> UserGroups { get; set; }
     }
 }
 

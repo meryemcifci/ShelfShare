@@ -1,0 +1,16 @@
+﻿@model ShelfShare.Entity.Concrete.Group
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Yeni Grup Oluştur</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Grup Adı</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Kaydet</button>
+</form>

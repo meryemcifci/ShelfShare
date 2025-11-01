@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShelfShare.DataAccess.Concrete;
 
@@ -11,9 +12,11 @@ using ShelfShare.DataAccess.Concrete;
 namespace ShelfShare.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20251101185731_AddGroupAndUserGroupEntities")]
+    partial class AddGroupAndUserGroupEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace ShelfShare.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookGroup", b =>
-                {
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookId", "GroupId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("BookGroups", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -325,6 +313,8 @@ namespace ShelfShare.DataAccess.Migrations
                     b.HasIndex("AddedByUserId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Books");
                 });
@@ -641,21 +631,6 @@ namespace ShelfShare.DataAccess.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("BookGroup", b =>
-                {
-                    b.HasOne("ShelfShare.Entity.Concrete.Book", null)
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShelfShare.Entity.Concrete.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("ShelfShare.Entity.Concrete.AppRole", null)
@@ -711,15 +686,22 @@ namespace ShelfShare.DataAccess.Migrations
                 {
                     b.HasOne("ShelfShare.Entity.Concrete.AppUser", "AddedByUser")
                         .WithMany("AddedBooks")
-                        .HasForeignKey("AddedByUserId");
+                        .HasForeignKey("AddedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ShelfShare.Entity.Concrete.Category", "Category")
                         .WithMany("Books")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("ShelfShare.Entity.Concrete.Group", "Group")
+                        .WithMany("Books")
+                        .HasForeignKey("GroupId");
+
                     b.Navigation("AddedByUser");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.GroupMember", b =>
@@ -891,6 +873,8 @@ namespace ShelfShare.DataAccess.Migrations
 
             modelBuilder.Entity("ShelfShare.Entity.Concrete.Group", b =>
                 {
+                    b.Navigation("Books");
+
                     b.Navigation("Members");
 
                     b.Navigation("UserGroups");
